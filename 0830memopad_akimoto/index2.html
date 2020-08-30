@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>myMemoPad（仮）</title>
+<script src="js/jquery-2.1.3.min.js"></script>
+<link rel="stylesheet" href="css/sample.css">
+</head>
+<body>
+<header>
+<h1>MemoPad（仮）</h1>
+</header>
+<main>
+    <input type="text" id="key">
+    <textarea id="memo"></textarea>
+    <ul>
+        <li id="save">Save</li>
+        <li id="clear">Clear</li>
+    </ul>
+    <ul>
+      <li id="clear1">Clear top</li>
+  </ul>
+</main>
+<table id="list">
+<!-- ここに追加データが挿入される -->
+</table>
+<script>
+
+//1.Save クリックイベント
+$('#save').on("click", function(){
+  const key = $("#key").val();
+  const memo = $("#memo").val();
+  localStorage.setItem(key, memo);
+  const html = '<tr><th>'+key+'</th><td>'+memo+'</td></tr>';
+  $('#list').append(html);
+  alert('ok');
+})
+
+
+//2.clear クリックイベント
+$('#clear').on("click", function(){
+  localStorage.clear();
+  $('#list').empty();
+  alert('ok');
+})
+
+//3.ページ読み込み：保存データ取得表示
+for(let i=0; i<localStorage.length; i++){
+  const key = localStorage.key(i);
+  const memo = localStorage.getItem(key);
+  const html = '<tr><th>'+key+'</th><td>'+memo+'</td></tr>';
+  $('#list').append(html);
+};
+
+// 4.1行修正する
+  // クリック時、行選択
+  $("#list tr").on("click",function(e){
+    $(this).siblings().removeClass("selected");   // 選択されている他の行があれば選択解除
+    $(this).addClass("selected");  // クリックされた行を赤くする
+    const column1 = $(this).children('th')[0].innerText; // keyデータを取得
+    const column2 = $(this).children('td')[0].innerText; // keyデータを取得
+    $("#key").val(column1);
+    $("#memo").val(column2);
+  });
+
+
+// 5.1行クリアする
+$('#clear1').on("click", function(){
+  let table = document.getElementById("list");  //リストの情報を取得
+  let cell = table.rows[0];   // 1行目オブジェクト取得
+  let dkey = localStorage.key(0);   //オブジェクトからキー名を取得
+  localStorage.removeItem(dkey);  //上記のキー名を元にローカルストレージのアイテムを削除
+  list.deleteRow(0); //リスト上の行を削除する
+  alert('ok');
+})
+
+    </script>
+
+
+
+
+</script>
+<footer><small>G's</small></footer>
+</body>
+</html>
+
+
